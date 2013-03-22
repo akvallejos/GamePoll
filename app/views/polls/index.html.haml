@@ -1,0 +1,23 @@
+#polls
+	%h1 Polls
+	#new_poll_ New Poll
+	%table
+		%thead
+			%th Poll #
+			%th # of players
+			%th Created on
+			%th View
+		%tbody
+			= render @polls
+:javascript
+	add_new_poll_button('');
+	
+	$('.button').button().click(function(){
+		$('#poll_results').remove();
+		
+		var id = $(this).attr('id');
+		$.get('/polls/' + id, function(data){
+			$('body').append(data);
+			$('#poll_results').dialog({title: 'Results', width: 570, modal: 'true', position: {my: "center top-20%", at: "center top-20%"}});
+		});
+	});

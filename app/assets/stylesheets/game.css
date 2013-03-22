@@ -1,0 +1,22 @@
+ol {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+li.game {
+	margin: 8px;
+	padding: 4px;
+	height: 80px;
+	overflow: hidden;
+	width: 120px;
+	display: table;
+	border-radius: 5px;
+	float: left;
+	background-color: #4C4C4C;
+	border: 3px solid black;
+}
+
+.clear{
+	clear: both;
+}

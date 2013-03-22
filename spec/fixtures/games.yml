@@ -1,0 +1,20 @@
+n_hex:
+    name: Neuroshima Hex
+    min_players: 2
+    max_players: 4
+decent:
+    name: Decent
+    min_players: 2
+    max_players: 5
+risk:
+    name: Risk
+    min_players: 3
+    max_players: 6
+diplomacy:
+    name: Diplomacy
+    min_players: 2
+    max_players: 7
+clue:
+    name: Clue
+    min_players: 3
+    max_players: 6

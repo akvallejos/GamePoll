@@ -1,0 +1,12 @@
+=form_for @poll, :remote => true do |f|
+	.ballot_form.ballot_entry
+		-if @voting == 'ranked'
+			= f.hidden_field :voting, :value => "ranked"
+			= render 'ballot/ranked_form'
+		-else
+			= render 'ballot/form'
+	.new_ballot_button Submit Ballot
+	=f.submit "Close Poll", {:class => 'button', :disabled => true, :confirm => 'Are you sure you want to close the poll?'}
+:javascript
+	add_new_ballot_button();
+	$('.button').button();

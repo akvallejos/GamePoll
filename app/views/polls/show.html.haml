@@ -1,0 +1,32 @@
+#poll_results
+	%button#rankings_button Show Rankings
+	
+	%button#assignments_button Show Assignments
+	
+	%div#rankings.results{:style => 'display:none;background-color:#414141;width:90%;margin:1em;border-radius:5px;padding:0.5em;'}
+		%table#rankings
+			%caption Game Rankings
+			%tr
+				%th Name
+				%th Min. Players
+				%th Max. Players
+				%th Votes
+			-@poll.rankings.reverse.each do |game|
+				%tr
+					%td= game.name
+					%td= game.min_players
+					%td= game.max_players
+					%td= @poll.votes_for(game)
+	
+	%div#assignments.results{:style => 'display:none;background-color:#414141;width:90%;margin:1em;border-radius:5px;padding:0.5em;'}
+		%div{:style=>'text-align:center;'} Assignments
+		%ul
+			-@poll.assignments.each do |assignment|
+				%li= assignment.game.name
+				%ul
+					-assignment.players.each do |player|
+						%li= player.name
+	
+	:javascript
+		$('#rankings_button').button().click(function(){$('#rankings').toggle();});
+		$('#assignments_button').button().click(function(){$('#assignments').toggle();});

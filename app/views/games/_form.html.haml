@@ -1,0 +1,22 @@
+= form_for @game, :remote => true do |f|
+	%table
+		%thead
+		%tbody
+			%tr
+				%td.label Name
+				%td.value= f.text_field :name
+			%tr
+				%td.label Min. Players
+				%td.value= f.text_field :min_players
+			%tr
+				%td.label Max. Players
+				%td.value= f.text_field :max_players
+			%tr
+				%td.label Home Brew?
+				%td.value
+					= f.check_box :homebrew
+					= " Yes"
+					
+	.button= f.submit	
+	
+		

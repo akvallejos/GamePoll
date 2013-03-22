@@ -1,0 +1,22 @@
+:javascript
+	var players = #{players_available.to_json};
+	$('.players_auto_complete').autocomplete({source: players});
+
+	
+.label Player:
+.players_data
+	%input.players_auto_complete{:name => 'poll[ballot][][player_name]'}
+.clear
+- counter = 0
+%table
+	%tr
+	- Game.all.each do |g|
+		%td{:title => "#{g.name} supports #{g.min_players} - #{g.max_players} players #{g.homebrew ? 'homebrew' : ''}"}
+			= check_box_tag 'poll[ballot][][game_id]', g.id, false, :id => dom_id(g)
+			= label_tag dom_id(g), g.name, :class => 'check_box_label'
+		- counter += 1
+		- if counter%3 == 0
+			%tr
+
+:javascript
+	$('td').tooltip({position: {my: "center bottom",at: "center top"}}).animate(0);

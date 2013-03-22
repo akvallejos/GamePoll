@@ -1,0 +1,26 @@
+:javascript
+	var players = #{players_available.to_json};
+	$('.players_auto_complete').autocomplete({source: players});
+
+	
+.label Player:
+.players_data
+	%input.players_auto_complete{:name => 'poll[ballot][][player_name]'}
+.clear
+.draggable_games{:style => 'float:left;'}
+	Games:
+	%ul
+		- Game.all.each do |g|
+			%li{:style => "cursor:pointer", 
+					:title => "#{g.name} supports #{g.min_players} - #{g.max_players} players #{g.homebrew ? 'homebrew' : ''}",
+					:name => 'poll[ballot][][game_id]',
+					:value => "#{g.id}",
+					:id => dom_id(g)}<>
+				= g.name
+.droppable_sortable_games{:style => 'float:right;width:20em;height:20em;background-color:gray;'}
+	Voted For:
+	%ol
+		%li.placeholder Add Games Here
+.clear
+:javascript
+	addDraggableDroppable();

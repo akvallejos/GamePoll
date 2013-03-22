@@ -1,0 +1,11 @@
+#games
+	%h1 Games
+	#new_game Add Game
+	#games_list
+		%ul
+			= render @games
+		.clear
+:javascript
+	add_new_game_button();
+	$('.game').each(function(){ if ($(this).attr('homebrew') == "true") { $(this).css('border', '3px solid #5f391b') } });
+	adjust_height_of_li();

@@ -1,0 +1,6 @@
+%tr
+	%td= poll.id
+	%td= poll.players.uniq.count
+	%td= poll.created_at.to_date
+	%td 
+		.button{:id => poll.id} View
