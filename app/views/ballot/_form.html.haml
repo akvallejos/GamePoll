@@ -10,7 +10,7 @@
 - counter = 0
 %table
 	%tr
-	- Game.all.each do |g|
+	- Game.all(:order => 'name asc').each do |g|
 		%td{:title => "#{g.name} supports #{g.min_players} - #{g.max_players} players #{g.homebrew ? 'homebrew' : ''}"}
 			= check_box_tag 'poll[ballot][][game_id]', g.id, false, :id => dom_id(g)
 			= label_tag dom_id(g), g.name, :class => 'check_box_label'

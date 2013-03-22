@@ -10,7 +10,7 @@
 .draggable_games{:style => 'float:left;'}
 	Games:
 	%ul
-		- Game.all.each do |g|
+		- Game.all(:order => 'name asc').each do |g|
 			%li{:style => "cursor:pointer", 
 					:title => "#{g.name} supports #{g.min_players} - #{g.max_players} players #{g.homebrew ? 'homebrew' : ''}",
 					:name => 'poll[ballot][][game_id]',
