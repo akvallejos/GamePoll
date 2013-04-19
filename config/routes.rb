@@ -16,6 +16,7 @@ GamePoll::Application.routes.draw do
   resources :polls
   resources :games
   resources :welcome
+  resources :players
   match 'ranked_polls' => 'polls#ranked', :as => :ranked
   
   # Sample resource route with options:

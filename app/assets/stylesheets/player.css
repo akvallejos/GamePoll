@@ -1,0 +1,17 @@
+table.player_info {
+	border-collapse: collapse;
+}
+
+table.player_info tr {
+	background-color: #4A4A4A;
+	border-top: 2px solid black;
+	border-bottom: 2px solid black;
+}
+
+table.player_info td {
+	padding: 0.2em;
+}
+
+.player_item {
+	cursor: pointer;
+}

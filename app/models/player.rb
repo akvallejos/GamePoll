@@ -2,6 +2,7 @@ class Player < ActiveRecord::Base
   attr_accessible :name, :id
   has_many :ballots
   has_many :games, :through => :ballots
+  has_many :polls, :through => :ballots, :uniq => true
   
   validates :name, :presence => true
   
@@ -30,9 +31,35 @@ class Player < ActiveRecord::Base
     new_ballots
   end
   
+  def most_voted_for_game
+    voting_history.keys.last
+  end
+  
+  def voting_history(type = nil)
+    if type.nil?
+      return games.count(:group => :name, :order => "count(*)")
+    else
+      return polls.where(:voting => type).
+              collect{|poll| poll.games.count(:group => 'name')}.
+              inject({}) {|hash, group| hash.merge(group) {|key, total, value| total + value}}
+    end
+  end #voting_history
+  
+  def ranked_voting_totals
+    p = polls.where(:voting => 'ranked'). #fetch all polls
+    collect{|poll| poll.games.sum(:weight, :group => 'name')}. #iterate over polls and sum the weight by game
+    inject({}){|hash, group| hash.merge(group) {|key, total, value| total.to_f + value.to_f }} #merge the hashes together and sum
+    
+    p.update(p){|k,v| v.to_f} #ensures all values are returned as floats
+  end
+  
   private 
   
   def random_weight
     rand(4)
+  end
+  
+  def count_game_votes
+    
   end
 end

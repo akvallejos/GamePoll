@@ -1,0 +1,12 @@
+%h3 Players
+#player_list{:style => 'float:left;width: 10em;'}
+	%ul
+	- @players.each do |player|
+		%li.player_item{ :player_id => player.id }= player.name
+#player_details{:style => 'float:left'}
+.clear
+
+:javascript
+	$('.player_item').click(function(){
+		$('#player_details').load("/players/" + $(this).attr('player_id'));
+	});

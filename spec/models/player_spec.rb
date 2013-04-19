@@ -31,3 +31,29 @@ describe Player do
     ballots.last.weight.should eq(1)
   end
 end
+
+describe Player, :profiles => :true do
+  fixtures :players, :games
+  
+  before :each do
+    p1 = Poll.new(:voting => 'ranked')
+    p1.ballots << (players(:nod).ranked_votes([games(:diplomacy), games(:risk)]))
+    p1.save
+    
+    p2 = Poll.new(:voting => 'ranked')
+    p2.ballots << (players(:nod).ranked_votes([games(:risk), games(:decent)]))
+    p2.save
+  end #each
+  
+  it "should return game most voted for" do
+    players(:nod).most_voted_for_game.should eq(games(:risk).name)
+  end
+  
+  it "it should return the games voted for by count" do
+    players(:nod).voting_history("ranked").should eq({'Risk' => 2, 'Diplomacy' => 1, 'Decent' => 1})
+  end
+  
+  it "should return the games and their total voted weight" do
+    players(:nod).ranked_voting_totals.should eq({'Risk' => 5.25, 'Diplomacy' => 2.75, 'Decent' => 2.5})
+  end
+end #Game :profile

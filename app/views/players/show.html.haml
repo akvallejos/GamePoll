@@ -1,0 +1,37 @@
+%h3 Player Profile for #{@player.name}
+
+%table.player_info
+	%tr
+		%td Polls Entered:
+		%td= @player.polls.count
+	%tr
+		%td Game Most Voted For:
+		%td= @player.most_voted_for_game
+#chart{:style => 'width: 50em;'}
+
+%script{:src => '/javascripts/jquery.jqplot.min.js'}
+%script{:src => '/javascripts/jqplot.barRenderer.min.js'}
+%script{:src => '/javascripts/jqplot.canvasAxisTickRenderer.min.js'}
+%script{:src => '/javascripts/jqplot.canvasTextRenderer.min.js'}
+%script{:src => '/javascripts/jqplot.categoryAxisRenderer.min.js'}
+
+
+:javascript
+	var player_history = #{@player.ranked_voting_totals.to_a.to_json};
+	
+	var jqplot = $.jqplot('chart', [player_history], {
+										title: 'Ranked Voting Totals',
+										seriesDefaults: {
+											renderer: $.jqplot.BarRenderer,
+											rendererOptions: {fillToZero: true}
+										},
+										axesDefaults: {
+											tickRenderer: $.jqplot.CanvasAxisTickRenderer
+										},
+										axes: {
+											xaxis: { 
+												renderer: $.jqplot.CategoryAxisRenderer,
+												tickOptions: { angle: -35 }
+											},
+										}
+								});

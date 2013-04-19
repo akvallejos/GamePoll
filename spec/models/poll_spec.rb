@@ -87,6 +87,10 @@ end
 describe Poll do
   fixtures :players, :games
   
+  # Voting in a Ranked Order poll has the following weights
+  # [2.75, 2.5, 2, 1]
+  # Any ballot cast past the 3rd ballot is weighted 1
+  
   before :each do 
     @ranked_poll = Poll.new
     @ranked_poll.voting = 'ranked'
@@ -102,7 +106,7 @@ describe Poll do
     @ranked_poll.voting.should eq("ranked")
   end
   
-  it "should assign diplomacy a weight of 5" do
+  it "should assign diplomacy a weight of 5.5" do
     @ranked_poll.votes_for(games(:diplomacy)).should eq(5.5)
   end
   
