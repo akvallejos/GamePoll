@@ -39,18 +39,17 @@ class Player < ActiveRecord::Base
     if type.nil?
       return games.count(:group => :name, :order => "count(*)")
     else
-      return polls.where(:voting => type).
-              collect{|poll| poll.games.count(:group => 'name')}.
+      return ballots.where("poll_id IN (?)", polls.where(:voting => type)).
+              collect{|ballot| {ballot.game.name => 1 }}.
               inject({}) {|hash, group| hash.merge(group) {|key, total, value| total + value}}
     end
   end #voting_history
   
   def ranked_voting_totals
-    p = polls.where(:voting => 'ranked'). #fetch all polls
-    collect{|poll| poll.games.sum(:weight, :group => 'name')}. #iterate over polls and sum the weight by game
+    ballots.where("poll_id IN (?)", polls.where(:voting => 'ranked')). #fetch all polls
+    collect{|ballot| { ballot.game.name => ballot.weight } }. #iterate over polls and sum the weight by game
     inject({}){|hash, group| hash.merge(group) {|key, total, value| total.to_f + value.to_f }} #merge the hashes together and sum
     
-    p.update(p){|k,v| v.to_f} #ensures all values are returned as floats
   end
   
   private 

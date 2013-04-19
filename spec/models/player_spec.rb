@@ -37,11 +37,13 @@ describe Player, :profiles => :true do
   
   before :each do
     p1 = Poll.new(:voting => 'ranked')
-    p1.ballots << (players(:nod).ranked_votes([games(:diplomacy), games(:risk)]))
+    p1.ballots << players(:nod).ranked_votes([games(:diplomacy), games(:risk)])
+    p1.ballots << players(:bonz).ranked_votes([games(:risk), games(:decent)])
     p1.save
     
     p2 = Poll.new(:voting => 'ranked')
-    p2.ballots << (players(:nod).ranked_votes([games(:risk), games(:decent)]))
+    p2.ballots << players(:nod).ranked_votes([games(:risk), games(:decent)])
+    p2.ballots << players(:bonz).ranked_votes([games(:diplomacy), games(:clue)])
     p2.save
   end #each
   
