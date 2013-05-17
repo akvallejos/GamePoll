@@ -2,11 +2,11 @@ class PollsController < ApplicationController
   layout false
   
   def index
-    @polls = Poll.where(:voting => nil).reverse 
+    @polls = Poll.where(:voting => nil) 
   end
   
   def ranked
-    @polls = Poll.where(:voting => 'ranked').reverse
+    @polls = Poll.where(:voting => 'ranked')
   end
   
   def new
