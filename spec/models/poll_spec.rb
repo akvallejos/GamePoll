@@ -24,7 +24,7 @@ describe Poll do
   
   it "should rank games by place" do
     @current_poll.rankings.should have(4).items
-    @current_poll.rankings[2].name.should eq(games(:risk).name)
+    @current_poll.rankings[1].name.should eq(games(:risk).name)
   end
   
   it "should return 3 players" do
@@ -64,27 +64,47 @@ describe Poll do
   
   it "should assign players to 2 games" do
     @current_poll.assignments.should have(2).items
+    @current_poll.assignments.collect{|a| a.game }.should eq([games(:n_hex),games(:risk)])
   end
   
-  it "should have n_hex as the winner" do
+  it "should rank games based on votes" do
+    @current_poll.rankings.should eq([games(:n_hex), games(:risk), games(:diplomacy), games(:decent)])
+  end
+  
+  it "should assign players to n_hex first" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
     @current_poll.assignments.first.game.should eq(games(:n_hex))
   end
   
-  it "should assign diplomacy second since risk's min players is 3 and there are only 2 players left" do
-    @current_poll.assignments[1].game.should eq(games(:diplomacy))
+  it "should assign zel to n_hex first" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
+    @current_poll.assignments.first.players.include?(players(:zel)).should be_true
   end
   
-  it "should assign 3 players to n_hex + unassigned to n_hex" do
-    @current_poll.assignments.first.players.should have(3).items
+  it "should assign 2 players to n_hex first" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
+    @current_poll.assignments.first.players.should have(2).items
   end
   
-  it "should assign 2 players to diplomacy" do
-    @current_poll.assignments[1].players.should have(2).items
+  it "should assign 3 players to risk" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
+    @current_poll.assignments[1].players.should have(3).items
   end
+  
+  it "should assign Pugly to risk" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
+    @current_poll.assignments[1].players.include?(players(:pugly)).should be_true
+  end
+  
+  it "should assign players to risk" do
+    @current_poll.should_receive(:games_that_support_all_players).and_return([games(:n_hex), games(:risk)])
+    @current_poll.assignments[1].game.should eq(games(:risk))
+  end
+  
 end
 
 # Ranked Order Polling
-describe Poll do
+describe Poll  do
   fixtures :players, :games
   
   # Voting in a Ranked Order poll has the following weights

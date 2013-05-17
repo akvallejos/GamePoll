@@ -11,7 +11,7 @@ class Poll < ActiveRecord::Base
   
     
   def winner
-    rankings.last.name
+    rankings.first.name
   end #winner
   
   
@@ -28,54 +28,71 @@ class Poll < ActiveRecord::Base
     games.each do |game|
       score = votes_for(game)
       rankings.insert((score*100).to_i, game) # * 10 captures fractional differences
-    end #names.uniq
-    rankings.compact
+    end #games.each
+    rankings.compact.reverse
   end #rankings
   
   def assignments
-    if(players.size <= rankings.last.max_players)
-      return [Assignment.new(rankings.last, players.uniq)]
+    if(players.size <= rankings.first.max_players)
+      return [Assignment.new(rankings.first, players.uniq)]
     else
-      @a = Array.new
-      assign_players
-      check_for_min_players
-      add_unassigned
-      return @a
+      supported_games = games_that_support_all_players
+      return assign_players(supported_games)
     end #if-else
   end #assignments
   
 private
 
-  def assign_players
-    index = -1
-    while unassigned.length > 0
-      p = ballots.where(:game_id => rankings[index].id).collect{ |b| b.player }
-      @a << Assignment.new(rankings[index], p)
-      index -= 1
+  def games_that_support_all_players
+    tmp_games = rankings
+    supported_players = 0
+    supported_games = []
+    while supported_players < players.length
+      supported_games = min_players_supported(supported_games, tmp_games.shift) 
+      supported_players = supported_games.inject(0) { |sum, g| sum += g.max_players }
     end #while
+    return supported_games
+  end #games_that_support_all_players
+  
+  def min_players_supported(current_games, new_game)
+    current_games << new_game
+    min_supported = current_games.inject(0){|sum, g| sum += g.min_players }
+    if min_supported <= players.size
+      return current_games
+    else
+      current_games.pop
+      return current_games
+    end
   end
   
-  def check_for_min_players
-    @a.each do |x|
-      if x.players.size < x.game.min_players
-        @a[@a.index(x) - 1].players << x.players.flatten.uniq
-        @a.delete(x)
-        check_for_min_players
-      end #if
-    end #a.each
-  end #check_for_min_players
+  def assign_players(supported_games)
+    @unassigned = players.collect{|p| p.id}
+    assigned_games = [] #supported_games.collect{|g| Assignment.new(g)}
+    
   
-  def unassigned
-    players - @a.collect{ |x| x.players}.flatten
-  end #unassigned
+    grouped_ballots = ballots.group_by(&:game)
+    supported_games.each do |g|
+      assigned_players = grouped_ballots[g].collect{ |b| b.player }
+      assigned_games << Assignment.new(g, assigned_players)
+      assigned_players.each {|p| @unassigned.delete(p.id) }
+    end #assignments
+    #puts unassigned
+    if @unassigned.size > 0
+      assigned_games.collect!{|a| add_unassigned_to_under_strength_games(a)}
+    end
+    assigned_games
+  end
   
-  def add_unassigned
-    @a.each do |g|
-      unassigned.each do |p|
-        g.players << p if g.players.size < g.game.max_players
+  def add_unassigned_to_under_strength_games(assignment)
+    if assignment.game.min_players > assignment.players.size
+      needed = assignment.game.max_players - assignment.players.size
+      (0...needed).each do
+        assignment.players.push(Player.find(@unassigned.pop)) unless @unassigned.empty?
       end
     end
-  end #add_unassigned
+    return assignment
+  end
+  
 end
     
     
