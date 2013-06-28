@@ -1,6 +1,12 @@
 #games
 	%h1 Games
-	#new_game Add Game
+	.action_bar
+		#new_game{:style => 'float:left'} Add Game
+		.filters{:style => 'float:left; margin-left: 2em;'}
+			Players: 
+			= text_field_tag :players, '', :size => 4
+		#reset{:style => 'margin-left: 1em'} Reset
+	.clear
 	#games_list
 		%ul
 			= render @games
@@ -9,3 +15,22 @@
 	add_new_game_button();
 	$('.game').each(function(){ if ($(this).attr('homebrew') == "true") { $(this).css('border', '3px solid #5f391b') } });
 	adjust_height_of_li();
+	
+	$('#players').keyup(function(){
+		var player = $(this).val();
+		
+		$('.game').each(function(){
+			if( player != "" && $(this).attr('max') < player || $(this).attr('min') > player ) {
+				$(this).hide();
+			}
+			else
+			{
+				$(this).show();
+			}
+		})
+	});
+	
+	$('#reset').button().click(function(){ $('.game').each(function(){
+			$(this).show();
+		})
+	});
