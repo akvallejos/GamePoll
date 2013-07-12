@@ -9,3 +9,9 @@
 		%a{:href => '/games'} Games
 	%li.menu_item
 		%a{:href => '/players'} Players
+	%li.menu_item
+		%a{:href => '#tab-2'} Random Game
+#tab-1
+	Welcome to the Game Poll Application
+#tab-2
+	= render 'polls/random_polls'

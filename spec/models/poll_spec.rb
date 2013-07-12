@@ -135,3 +135,16 @@ describe Poll  do
   end
   
 end
+
+#random Poll
+describe Poll do
+  fixtures :games
+  
+  it "should return risk" do
+    Poll.random_game(7).should eq(games(:diplomacy))
+  end
+  
+  it "should return nil" do
+    Poll.random_game(8).should be_nil
+  end
+end

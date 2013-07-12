@@ -9,6 +9,11 @@ class PollsController < ApplicationController
     @polls = Poll.where(:voting => 'ranked').reverse
   end
   
+  def random
+    num_players = params[:num_players]
+    @game = Poll.random_game(num_players)
+  end
+  
   def new
     @poll = Poll.new
     @voting= params[:voting]

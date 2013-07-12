@@ -1,0 +1,16 @@
+
+.label Number of Players:
+.data= text_field_tag :num_players
+
+= submit_tag 'Get Game', {:id => 'random'}
+	
+#game_popup
+
+:javascript
+	$('#random').click(function(){
+		var num_players = $('#num_players').val();
+		$.get('/random_poll?num_players=' + num_players, function(data){
+			$('#game_popup').html(data);
+			$('#game_popup').dialog();
+		});
+	});

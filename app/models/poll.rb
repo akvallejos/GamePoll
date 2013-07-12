@@ -41,6 +41,10 @@ class Poll < ActiveRecord::Base
     end #if-else
   end #assignments
   
+  def self.random_game(num_players)
+    Game.where("min_players <= ? AND max_players >= ?", num_players, num_players).to_a.shuffle.shift
+  end #self.random_game
+  
 private
 
   def games_that_support_all_players
