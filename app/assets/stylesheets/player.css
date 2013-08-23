@@ -1,15 +1,16 @@
-table.player_info {
+table.player_info, table.current_info {
 	border-collapse: collapse;
 }
 
-table.player_info tr {
+table.player_info tr, table.current_info tr {
 	background-color: #4A4A4A;
 	border-top: 2px solid black;
 	border-bottom: 2px solid black;
+	border-radius: 15px;
 }
 
-table.player_info td {
-	padding: 0.2em;
+table.player_info td, table.current_info td {
+	padding: 0.4em;
 }
 
 .player_item {

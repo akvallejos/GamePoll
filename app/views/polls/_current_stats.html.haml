@@ -1,0 +1,11 @@
+#current_status
+	%table.current_info
+		%tr
+			%td Current Games in Database
+			%td= Game.all.size
+		%tr
+			%td Current Players Created
+			%td= Player.all.size
+		%tr
+			%td Current Polls Completed
+			%td= Poll.all.size

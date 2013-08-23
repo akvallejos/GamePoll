@@ -6,12 +6,14 @@
 	%li.menu_item
 		%a{:href => '/ranked_polls'} Ranked Polls
 	%li.menu_item
+		%a{:href => '#tab-2'} Random Game
+	%li.menu_item
 		%a{:href => '/games'} Games
 	%li.menu_item
 		%a{:href => '/players'} Players
-	%li.menu_item
-		%a{:href => '#tab-2'} Random Game
+		
 #tab-1
 	Welcome to the Game Poll Application
+	= render 'polls/current_stats'
 #tab-2
 	= render 'polls/random_polls'

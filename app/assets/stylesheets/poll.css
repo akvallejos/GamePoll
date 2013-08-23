@@ -5,3 +5,7 @@
 .ballot_form{
 	display: block;
 }
+
+#current_status{
+	margin: 1em;
+}
