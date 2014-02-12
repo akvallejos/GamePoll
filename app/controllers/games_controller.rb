@@ -21,9 +21,6 @@ class GamesController < ApplicationController
     end
   end #create
   
-  def refresh
-  end  
-  
   def edit
     @game = Game.find(params[:id])
   end
@@ -31,10 +28,13 @@ class GamesController < ApplicationController
   def update
     @game = Game.find(params[:id])
     
-    if @game.update_attributes(params[:id])
-      redirect_to games_path, :notice => 'Game successfuly updated'
-    else
-      render :action => 'edit'
-    end
-  end
+    respond_to do |format|
+      if @game.update_attributes(params[:game])
+        format.js
+      else
+        render :action => 'edit'
+      end
+    end #respond_to
+  end #update
+  
 end

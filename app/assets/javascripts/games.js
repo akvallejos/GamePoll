@@ -19,3 +19,11 @@ function adjust_height_of_li(){
 		$(this).css('height', max_height);
 	});
 }
+
+function edit_game(id){
+	$('#new_game_form').remove(); //prevents form from opening more than once
+	$.get('/games/' + id + '/edit', function(html){
+		$('body').append(html);
+		$('#new_game_form').dialog({'modal': 'true'});
+	});	
+}
